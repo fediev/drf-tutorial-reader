@@ -5,3 +5,4 @@
 - STEP 03. Serializer -> ModelSerializer
 - STEP 04. Response, Request, @api_view
 - STEP 05. Class-based view
+- STEP 06. Auth and permissions
