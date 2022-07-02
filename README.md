@@ -4,3 +4,4 @@
 - STEP 02. Serializer, JSONParser
 - STEP 03. Serializer -> ModelSerializer
 - STEP 04. Response, Request, @api_view
+- STEP 05. Class-based view
