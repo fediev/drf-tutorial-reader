@@ -1,18 +1,25 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.forms.models import model_to_dict
+from rest_framework.parsers import JSONParser
 
 from .models import Snippet
+from .serializers import SnippetSerializer
 
 
 @csrf_exempt
 def snippet_list(request):
     if request.method == "GET":
         snippets = Snippet.objects.all()
-        data = list(snippets.values())
-        return JsonResponse(data, safe=False)
+        serializer = SnippetSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
-    return JsonResponse({"error": f"Not Supported Method `{request.method}`"})
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serializer = SnippetSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
@@ -23,7 +30,17 @@ def snippet_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == "GET":
-        data = model_to_dict(snippet)
-        return JsonResponse(data, safe=False)
+        serializer = SnippetSerializer(snippet)
+        return JsonResponse(serializer.data)
 
-    return JsonResponse({"error": f"Not Supported Method `{request.method}`"})
+    elif request.method == "PUT":
+        data = JSONParser().parse(request)
+        serializer = SnippetSerializer(snippet, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == "DELETE":
+        snippet.delete()
+        return HttpResponse(status=204)
