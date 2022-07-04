@@ -7,3 +7,4 @@
 - STEP 05. Class-based view
 - STEP 06. Auth and permissions
 - STEP 07. Custom endpoint
+- STEP 08. Hyperlinking and pagination
