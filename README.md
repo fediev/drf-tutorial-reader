@@ -8,3 +8,4 @@
 - STEP 06. Auth and permissions
 - STEP 07. Custom endpoint
 - STEP 08. Hyperlinking and pagination
+- STEP 09. ViewSets
