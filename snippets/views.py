@@ -16,6 +16,16 @@ class SnippetViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
     ]
+    filterset_fields = {
+        "title": ["icontains", "isnull"],
+        "code": ["icontains"],
+        "created": ["gte", "lte"],
+        "language": ["exact", "icontains"],
+    }
+    search_fields = ["title", "code", "language"]
+    ordering_fields = ["id", "owner", "title", "language"]
+    # default ordering. override model's Meta.ordering
+    ordering = "-id"
 
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
     def highlight(self, request, *args, **kwargs):
@@ -29,3 +39,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filterset_fields = ["username", "is_active"]
+    search_fields = ["username"]
+    ordering_fields = ["id", "username"]
+    ordering = "-id"
